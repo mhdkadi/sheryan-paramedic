@@ -58,7 +58,7 @@ class MainDrawerView extends GetView<HomeController> {
                             drawerItem(
                               icon: Icons.notifications,
                               title: "الإشعارات",
-                              route: "/NotificatoinsView",
+                              route: "NotificatoinsView",
                               context: context,
                             ),
                           ],
