@@ -1,60 +1,54 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:sheryan_paramedic/app/modules/home/home_binding.dart';
-import 'package:sheryan_paramedic/app/modules/home/home_view.dart';
-import 'package:sheryan_paramedic/app/modules/login/login_binding.dart';
-import 'package:sheryan_paramedic/app/modules/login/login_view.dart';
-import 'package:sheryan_paramedic/app/modules/notifications/notificatoin_view.dart';
-import 'package:sheryan_paramedic/app/modules/profile/paramedic_profile_binding.dart';
-import 'package:sheryan_paramedic/app/modules/profile/paramedic_profile_view.dart';
-import 'package:sheryan_paramedic/app/modules/register/register_binding.dart';
-import 'package:sheryan_paramedic/app/modules/register/register_view.dart';
-import 'package:sheryan_paramedic/app/modules/wrapper/wrapper_binding.dart';
-import 'package:sheryan_paramedic/app/modules/wrapper/wrapper_view.dart';
+import 'dart:convert';
+import 'dart:io';
 
-void main() {
-  runApp(const MyApp());
+import 'package:bot_toast/bot_toast.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:local_database/config/main_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:sheryan_paramedic/app/core/services/notifications/firebase_cloud_messaging.dart';
+import 'package:sheryan_paramedic/app/modules/auth/auth_module.dart';
+
+import 'app/core/constants/globals.dart';
+import 'app/core/helpers/data_helper.dart';
+import 'app/core/theme/colors.dart';
+import 'app/core/theme/theme.dart';
+import 'app/core/utils/logger.dart';
+import 'app/core/widgets/app_messenger.dart';
+import 'app_initial_binding.dart';
+import 'app_pages.dart';
+
+part 'app_initialize.dart';
+
+void main() async {
+  await _preInitializations();
+  runApp(const MainWidget());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainWidget extends StatefulWidget {
+  const MainWidget({Key? key}) : super(key: key);
 
+  @override
+  State<MainWidget> createState() => _MainWidgetState();
+}
+
+class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
-      initialRoute: "/wrapperPage",
-      getPages: [
-        GetPage(
-          name: "/loginPage",
-          page: () => LoginView(),
-          binding: LoginBinding(),
-        ),
-        GetPage(
-          name: "/registerPage",
-          page: () => RegisterView(),
-          binding: RegisterBinding(),
-        ),
-        GetPage(
-          name: "/homePage",
-          page: () => const HomeView(),
-          binding: HomeBinding(),
-        ),
-        GetPage(
-          name: "/ParamedicProfile",
-          page: () => const ParamedicProfile(),
-          binding: ParamedicProfileBinding(),
-        ),
-        GetPage(
-          name: "/wrapperPage",
-          page: () => const WrapperView(),
-          binding: WrapperBinding(),
-        ),
-        GetPage(
-          name: "/NotificatoinsView",
-          page: () => const NotificatoinsView(),
-        ),
-      ],
+      textDirection: TextDirection.rtl,
+      scaffoldMessengerKey: snackbarKey,
+      initialRoute: AuthModule.authInitialRoute,
+      getPages: AppPages.appRoutes,
+      initialBinding: AppInitialBindings(),
+      debugShowCheckedModeBanner: appMode != AppMode.release,
+      enableLog: appMode != AppMode.release,
+      theme: CustomTheme.lightTheme(context),
+      builder: BotToastInit(),
+      navigatorObservers: [BotToastNavigatorObserver()],
     );
   }
 }

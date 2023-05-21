@@ -1,96 +1,83 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
-import 'package:sheryan_paramedic/app/core/models/user_model.dart';
-import 'package:sheryan_paramedic/app/core/services/local_database.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:local_database/config/local_database_routs.dart';
+import 'package:local_database/models/result_model.dart';
 
-class UserRepository {
-  final Dio dio;
-  final LocalDataBase localDataBase;
+import '../constants/request_routes.dart';
+import '../models/user_model.dart';
+import '../utils/exceptions.dart';
+import 'repository_interface.dart';
 
-  UserRepository({
-    required this.dio,
-    required this.localDataBase,
-  });
+class UserRepository extends RepositoryInterface {
+  Future<void> updateUser({
+    required String userId,
+    required String status,
+    required LatLng currentLocation,
+  }) async {
+    try {
+      await dio.patch(
+        "${RequestRoutes.user}/$userId",
+        data: {
+          "status": status,
+          "location": {
+            "lat": currentLocation.latitude,
+            "lng": currentLocation.longitude,
+          },
+        },
+      );
+    } catch (error) {
+      throw ExceptionHandler(error);
+    }
+  }
 
   Future<User> login({
     required String username,
     required String password,
+    required String fcmToken,
   }) async {
     try {
-      final Response response = await dio.post(
-        "/users/login",
+      final Response result = await dio.post(
+        RequestRoutes.login,
         data: {
           "username": username,
           "password": password,
+          'fcmToken': fcmToken,
         },
       );
-      log(response.data.toString());
-      User user = User.fromMap(response.data);
-      await localDataBase.putUser(user);
+      final User user = User.fromMap(result.data);
+      await setUser(user);
       return user;
-    } catch (e) {
-      if (e.runtimeType == DioError) {
-        e as DioError;
-        if (e.response?.statusCode == 404) {
-          throw "المستخدم غير موجود";
-        } else {
-          throw "حدث خطأ ما";
-        }
-      } else if (e.runtimeType == SocketException) {
-        throw "لايوجد إنترنت";
-      } else if (e.runtimeType == FormatException) {
-        throw "خطأ في المعلومات";
-      } else {
-        throw "حدث خطأ ما";
-      }
+    } catch (error) {
+      throw ExceptionHandler(error);
     }
   }
 
-////////////////////////////////////////////////////////////////////////////////////////
-  ///
-  ///
-  ///
-  ///
-  Future<User> register({
-    required String username,
-    required String password,
-    required String address,
-    required String phoneNumber,
-    required String hospital,
-  }) async {
+  Future<User?> getUser() async {
     try {
-      final Response response = await dio.post("/users/register", data: {
-        "username": username,
-        "password": password,
-        "address": address,
-        "phone": phoneNumber,
-        "hospital": hospital,
-      });
-
-      log(response.data.toString());
-
-      User user = User.fromMap(response.data);
-      await localDataBase.putUser(user);
-      return user;
-    } catch (e) {
-      log(e.toString());
-
-      if (e.runtimeType == DioError) {
-        e as DioError;
-        if (e.response?.statusCode == 404) {
-          throw "يوجد خطأ ما ";
-        } else {
-          throw "حدث خطأ ما ";
-        }
-      } else if (e.runtimeType == SocketException) {
-        throw "لا يوجد إنترنت";
-      } else if (e.runtimeType == FormatException) {
-        throw " خطأ في المعلومات ";
+      final Result result = await localDatabase.get(LocalDatabaseRouts.getUser);
+      if (result.data != null) {
+        return User.fromMap(result.data);
       } else {
-        throw "حدث خطأ ما ";
+        return null;
       }
+    } catch (error) {
+      throw ExceptionHandler(error);
+    }
+  }
+
+  Future<void> setUser(User user) async {
+    try {
+      await localDatabase.post(LocalDatabaseRouts.setUser, data: user.toMap());
+    } catch (error) {
+      throw ExceptionHandler(error);
+    }
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      await localDatabase.delete(LocalDatabaseRouts.clearDB);
+    } catch (error) {
+      throw ExceptionHandler(error);
     }
   }
 }

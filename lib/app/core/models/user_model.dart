@@ -1,37 +1,35 @@
 class User {
-  final String id;
-  final String address;
-  final String phone;
   final String username;
-  final String hospital;
+  final String fullName;
+  final String phone;
+  final String accountType;
+  final String status;
+  final String id;
 
   User({
-    required this.id,
-    required this.address,
-    required this.phone,
     required this.username,
-    required this.hospital,
+    required this.fullName,
+    required this.phone,
+    required this.accountType,
+    required this.status,
+    required this.id,
   });
-  factory User.fromMap(Map data) => User(
-        id: data["id"],
-        address: data["address"],
-        phone: data["phone"],
-        username: data["username"],
-        hospital: data["hospital"] ?? "unknown",
+
+  factory User.fromMap(Map<String, dynamic> json) => User(
+        username: json["username"],
+        fullName: json["fullName"],
+        phone: json["phone"],
+        accountType: json["accountType"],
+        status: json["status"],
+        id: json["_id"],
       );
 
-  Map<String, dynamic> toMap() {
-    return {
-      "id": id,
-      "address": address,
-      "phone": phone,
-      "username": username,
-      "hospital": hospital,
-    };
-  }
-
-  @override
-  String toString() {
-    return toMap().toString();
-  }
+  Map<String, dynamic> toMap() => {
+        "username": username,
+        "fullName": fullName,
+        "phone": phone,
+        "accountType": accountType,
+        "status": status,
+        "_id": id,
+      };
 }
