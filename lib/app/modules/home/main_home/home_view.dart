@@ -6,10 +6,13 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sheryan_paramedic/app/core/helpers/data_helper.dart';
+import 'package:sheryan_paramedic/app/core/models/order_model.dart';
+import 'package:sheryan_paramedic/app/core/services/size_configration.dart';
 import 'package:sheryan_paramedic/app/core/theme/colors.dart';
 import 'package:sheryan_paramedic/app/core/widgets/elevated_button.dart';
 import 'package:sheryan_paramedic/app/core/widgets/widget_state.dart';
 import 'package:sheryan_paramedic/app/modules/drawer/main_drawer/main_drawer_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'home_controller.dart';
 
@@ -109,7 +112,12 @@ class MainHomeViewBody extends GetView<MainHomeController> {
                   onStartPressed: () async {
                     controller.updateUser("offline");
                   });
-
+            case DriverState.onRide:
+              return goingToUserWidget(
+                  order: controller.order!,
+                  onStart: () async {},
+                  context: context,
+                  controller: controller);
             default:
               return SizedBox(
                 child: Text(DataHelper.driverState.name),
@@ -126,6 +134,14 @@ class MainHomeViewBody extends GetView<MainHomeController> {
             trafficEnabled: true,
             zoomControlsEnabled: false,
             mapToolbarEnabled: false,
+            polylines: {
+              Polyline(
+                polylineId: const PolylineId("value"),
+                points: controller.polylinePoints,
+                color: AppColors.path,
+              )
+            },
+            markers: controller.markers,
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
             gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
@@ -136,9 +152,7 @@ class MainHomeViewBody extends GetView<MainHomeController> {
               zoom: 12,
               target: DataHelper.currentLocation,
             ),
-            onCameraMove: (position) {
-              controller.currentLocation = position.target;
-            },
+            onCameraMove: (position) {},
             onMapCreated: (mapController) {
               controller.mapController = mapController;
               controller.setMapStyle(mapController, context);

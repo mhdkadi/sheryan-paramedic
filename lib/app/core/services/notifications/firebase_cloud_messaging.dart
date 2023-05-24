@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get.dart';
 import 'package:local_database/config/logger.dart';
 import 'package:sheryan_paramedic/app/core/constants/globals.dart';
+import 'package:sheryan_paramedic/app/core/models/order_model.dart';
 import 'package:sheryan_paramedic/app/core/theme/colors.dart';
+import 'package:sheryan_paramedic/app/modules/home/main_home/home_controller.dart';
 
 part 'channels.dart';
 
@@ -71,6 +76,12 @@ class NotificationService {
       (RemoteMessage message) async {
         try {
           logger(message.toMap().toString());
+          if (Get.isRegistered<MainHomeController>()) {
+            Order order = Order.fromMap(jsonDecode((message.data["order"])));
+            MainHomeController mainHomeController =
+                Get.find<MainHomeController>();
+            mainHomeController.newOrder(order);
+          }
         } catch (e) {
           logger(e.toString());
         }

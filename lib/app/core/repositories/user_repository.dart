@@ -13,12 +13,14 @@ class UserRepository extends RepositoryInterface {
     required String userId,
     required String status,
     required LatLng currentLocation,
+    required String fcmToken,
   }) async {
     try {
       await dio.patch(
         "${RequestRoutes.user}/$userId",
         data: {
           "status": status,
+          'fcmToken': fcmToken,
           "location": {
             "lat": currentLocation.latitude,
             "lng": currentLocation.longitude,

@@ -4,5 +4,6 @@ class RequestRoutes {
   static const String order = "/order";
   static const String user = "/user";
   static const String notification = "/notification";
+  static const String crossroad = "/crossroad";
   static const String pathologicalCases = "/pathological-case";
 }

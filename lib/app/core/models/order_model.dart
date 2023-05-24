@@ -1,11 +1,12 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sheryan_paramedic/app/core/models/user_model.dart';
 
 class Order {
   final String id;
   final String level;
   final String status;
   final LatLng location;
-  final String user;
+  final User user;
   final String pathologicalCase;
   final String paramedic;
   final DateTime createdAt;
@@ -26,7 +27,7 @@ class Order {
         level: json["level"],
         status: json["status"],
         location: LatLng(json["location"]["lat"], json["location"]["lng"]),
-        user: json["user"],
+        user: User.fromMap(json["user"]),
         pathologicalCase: json["pathologicalCase"],
         paramedic: json["paramedic"],
         createdAt: DateTime.parse(json["createdAt"]),

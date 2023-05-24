@@ -16,12 +16,12 @@ class User {
   });
 
   factory User.fromMap(Map<String, dynamic> json) => User(
-        username: json["username"],
-        fullName: json["fullName"],
-        phone: json["phone"],
-        accountType: json["accountType"],
-        status: json["status"],
-        id: json["_id"],
+        username: json["username"] ?? "",
+        fullName: json["fullName"] ?? "",
+        phone: json["phone"] ?? "",
+        accountType: json["accountType"] ?? "",
+        status: json["status"] ?? "",
+        id: json["_id"] ?? "",
       );
 
   Map<String, dynamic> toMap() => {
