@@ -50,12 +50,13 @@ class LoginView extends GetView<LoginController> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        const SizedBox(
-                          width: 200,
-                          height: 200,
-                          child: Placeholder(),
+                        const SizedBox(height: 40),
+                        const Icon(
+                          Icons.screen_lock_portrait_outlined,
+                          size: 200,
+                          color: AppColors.secondry,
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 40),
                         HeaderTextField(
                           widgetState: widgetState,
                           formControlName: "username",

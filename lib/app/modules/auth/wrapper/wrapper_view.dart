@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sheryan_paramedic/app/core/theme/colors.dart';
 
 import '../../../core/services/size_configration.dart';
 import '../../../core/widgets/widget_state.dart';
@@ -22,10 +23,10 @@ class WrapperView extends GetView<WrapperController> {
                   children: [
                     const Spacer(),
                     const SizedBox(height: 45),
-                    const SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: Placeholder(),
+                    const Icon(
+                      Icons.screen_lock_portrait_outlined,
+                      size: 200,
+                      color: AppColors.secondry,
                     ),
                     const SizedBox(height: 20),
                     if (widgetState == WidgetState.error)
