@@ -28,7 +28,7 @@ class Order {
         status: json["status"],
         location: LatLng(json["location"]["lat"], json["location"]["lng"]),
         user: User.fromMap(json["user"]),
-        pathologicalCase: json["pathologicalCase"],
+        pathologicalCase: json["pathologicalCase"]["name"],
         paramedic: json["paramedic"],
         createdAt: DateTime.parse(json["createdAt"]),
       );

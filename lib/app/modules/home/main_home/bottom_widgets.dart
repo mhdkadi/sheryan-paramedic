@@ -74,9 +74,9 @@ Widget goingToUserWidget({
 
   return DraggableScrollableSheet(
     controller: draggableScrollableController,
-    maxChildSize: 0.2,
+    maxChildSize: 0.25,
     minChildSize: 0.12,
-    initialChildSize: 0.2,
+    initialChildSize: 0.25,
     builder: (context, scrollController) {
       return WillPopScope(
         onWillPop: () async {
@@ -118,6 +118,7 @@ Widget goingToUserWidget({
                               borderRadius: BorderRadius.circular(15),
                               child: const Icon(
                                 Icons.person,
+                                color: AppColors.secondry,
                                 size: 50,
                               ),
                             ),
@@ -131,30 +132,6 @@ Widget goingToUserWidget({
                             ),
                           ),
                           const Spacer(),
-                          SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: StateBuilder<MainHomeController>(
-                                id: "arrivedToMeetingPoint",
-                                disableState: true,
-                                initialWidgetState: WidgetState.loaded,
-                                builder: (widgetState, controller) {
-                                  return ElevatedStateButton(
-                                    widgetState: widgetState,
-                                    onPressed: () {},
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          AppColors.secondryBackground,
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                    child: const Icon(
-                                      Icons.notifications,
-                                      color: AppColors.path,
-                                    ),
-                                  );
-                                }),
-                          ),
-                          const SizedBox(width: 20),
                           SizedBox(
                             width: 50,
                             height: 50,
@@ -178,21 +155,20 @@ Widget goingToUserWidget({
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     color: AppColors.secondryBackground,
-                    //     borderRadius: BorderRadius.circular(15),
-                    //   ),
-                    //   child: ListTile(
-                    //     leading: const Icon(
-                    //       Icons.location_history,
-                    //       color: AppColors.secondry,
-                    //       size: 35,
-                    //     ),
-                    //     title: Text(ride.addressFrom),
-                    //     subtitle: Text(ride.addressFromDetails),
-                    //   ),
-                    // ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.secondryBackground,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.location_history,
+                          color: AppColors.secondry,
+                          size: 35,
+                        ),
+                        title: Text(order.pathologicalCase),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                   ],
                 ),
