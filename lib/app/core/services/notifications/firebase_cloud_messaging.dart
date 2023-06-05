@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -75,7 +77,7 @@ class NotificationService {
         try {
           logger(message.toMap().toString());
           if (Get.isRegistered<MainHomeController>()) {
-            Order order = Order.fromMap((message.data["order"]));
+            Order order = Order.fromMap(jsonDecode(message.data["order"]));
             MainHomeController mainHomeController =
                 Get.find<MainHomeController>();
             mainHomeController.newOrder(order);
