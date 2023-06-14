@@ -24,6 +24,7 @@ class MainHomeController extends GetxStateController
   List<LatLng> polylinePoints = [];
   List<CrossRoad> crossRoads = [];
   Set<Marker> markers = {};
+  String level = "غير محدد";
   GoogleMapController? mapController;
   final ConstantsRepository constantsRepository;
   final UserRepository userRepository;

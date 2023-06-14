@@ -74,9 +74,9 @@ Widget goingToUserWidget({
 
   return DraggableScrollableSheet(
     controller: draggableScrollableController,
-    maxChildSize: 0.25,
+    maxChildSize: 0.35,
     minChildSize: 0.12,
-    initialChildSize: 0.25,
+    initialChildSize: 0.35,
     builder: (context, scrollController) {
       return WillPopScope(
         onWillPop: () async {
@@ -94,9 +94,9 @@ Widget goingToUserWidget({
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.keyboard_arrow_down_rounded,
                           color: AppColors.font,
@@ -127,7 +127,7 @@ Widget goingToUserWidget({
                           SizedBox(
                             width: customSize.screenWidth - 250,
                             child: Text(
-                              "${order.user.fullName}",
+                              order.user.fullName,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -170,6 +170,53 @@ Widget goingToUserWidget({
                       ),
                     ),
                     const SizedBox(height: 20),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.secondryBackground,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.location_history,
+                          color: AppColors.secondry,
+                          size: 35,
+                        ),
+                        title: const Text("درجة الخطورة"),
+                        subtitle: GetBuilder<MainHomeController>(
+                            id: "GetBuilder",
+                            builder: (context) {
+                              return DropdownButton<String>(
+                                  dropdownColor: AppColors.background,
+                                  value: controller.level,
+                                  items: [
+                                    "غير محدد",
+                                    "1",
+                                    "2",
+                                    "3",
+                                    "4",
+                                    "5",
+                                    "6",
+                                    "7",
+                                    "8",
+                                    "9",
+                                    "10"
+                                  ]
+                                      .map((e) => DropdownMenuItem<String>(
+                                            value: e,
+                                            child: Text(e),
+                                          ))
+                                      .toList(),
+                                  onChanged: (c) async {
+                                    BotToast.showLoading();
+                                    await Future.delayed(
+                                        const Duration(seconds: 2));
+                                    BotToast.closeAllLoading();
+                                    controller.level = c!;
+                                    controller.update(["GetBuilder"]);
+                                  });
+                            }),
+                      ),
+                    ),
                   ],
                 ),
               ),

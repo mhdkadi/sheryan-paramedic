@@ -31,7 +31,7 @@ class LoginView extends GetView<LoginController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "تسجيل دخول",
+          "تسجيل دخول المسعف",
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
         centerTitle: true,
